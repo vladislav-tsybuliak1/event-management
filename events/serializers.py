@@ -13,5 +13,16 @@ class EventSerializer(serializers.ModelSerializer):
             "start_time",
             "end_time",
             "location",
-            "organizer"
+            "organizer",
         )
+
+
+class EventListSerializer(EventSerializer):
+    start_time = serializers.SerializerMethodField()
+    end_time = serializers.SerializerMethodField()
+
+    def get_start_time(self, obj: Event) -> str:
+        return obj.start_time.strftime("%d %b %Y %H:%M")
+
+    def get_end_time(self, obj: Event) -> str:
+        return obj.end_time.strftime("%d %b %Y %H:%M")
