@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
+    # 3rd parties
+    "rest_framework",
+
     #custom apps
     "users",
     "events",
