@@ -18,6 +18,10 @@ class EventSerializer(serializers.ModelSerializer):
 
 
 class EventListSerializer(EventSerializer):
+    organizer = serializers.CharField(
+        source="organizer.username",
+        read_only=True,
+    )
     start_time = serializers.SerializerMethodField()
     end_time = serializers.SerializerMethodField()
 
