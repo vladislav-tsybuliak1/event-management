@@ -4,6 +4,10 @@ from events.models import Event
 
 
 class EventSerializer(serializers.ModelSerializer):
+    organizer = serializers.CharField(
+        source="organizer.username",
+        read_only=True,
+    )
     class Meta:
         model = Event
         fields = (
@@ -15,13 +19,13 @@ class EventSerializer(serializers.ModelSerializer):
             "location",
             "organizer",
         )
+        read_only_fields = (
+            "id",
+            "organizer",
+        )
 
 
 class EventListSerializer(EventSerializer):
-    organizer = serializers.CharField(
-        source="organizer.username",
-        read_only=True,
-    )
     start_time = serializers.SerializerMethodField()
     end_time = serializers.SerializerMethodField()
 
