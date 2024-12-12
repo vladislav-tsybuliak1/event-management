@@ -34,8 +34,8 @@ class EventSerializer(serializers.ModelSerializer):
 
 
 class EventListSerializer(EventSerializer):
-    start_time = serializers.SerializerMethodField()
-    end_time = serializers.SerializerMethodField()
+    start_time = serializers.SerializerMethodField(read_only=True)
+    end_time = serializers.SerializerMethodField(read_only=True)
 
     def get_start_time(self, obj: Event) -> str:
         return obj.start_time.strftime("%d %b %Y %H:%M")
@@ -45,7 +45,7 @@ class EventListSerializer(EventSerializer):
 
 
 class EventRetrieveSerializer(EventListSerializer):
-    participants = serializers.SerializerMethodField()
+    participants = serializers.SerializerMethodField(read_only=True)
 
     def get_participants(self, obj: Event) -> list[str]:
         return [
