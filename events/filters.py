@@ -81,7 +81,7 @@ class EventFilter(django_filters.FilterSet):
         queryset = queryset.annotate(
             priority=Case(
                 When(start_time__gte=now(), then=Value(1)),
-                default=Value(2),  # Finished events
+                default=Value(2),
                 output_field=IntegerField(),
             )
         )
