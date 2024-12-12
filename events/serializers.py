@@ -6,10 +6,7 @@ from events.models import Event
 
 
 class EventSerializer(serializers.ModelSerializer):
-    organizer = serializers.CharField(
-        source="organizer.username",
-        read_only=True,
-    )
+    organizer = serializers.SerializerMethodField(read_only=True)
     participants = serializers.IntegerField(
         source="participants.count",
         read_only=True,
@@ -31,6 +28,9 @@ class EventSerializer(serializers.ModelSerializer):
             "organizer",
             "participants",
         )
+
+    def get_organizer(self, obj: Event) -> str:
+        return f"{obj.organizer.username} ({obj.organizer.email})"
 
 
 class EventListSerializer(EventSerializer):
