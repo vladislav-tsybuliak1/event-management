@@ -16,6 +16,7 @@ from email_templates.event_registration_template import (
 from email_templates.event_cancel_registration_template import (
     CANCEL_REGISTRATION_HTML_CONTENT,
 )
+from events.filters import EventFilter
 from events.models import Event
 from events.permissions import IsOrganizerOrReadOnly
 from events.serializers import (
@@ -30,6 +31,7 @@ class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, IsOrganizerOrReadOnly]
+    filterset_class = EventFilter
 
     def get_serializer_class(self) -> type[EventSerializer]:
         if self.action == "list":
