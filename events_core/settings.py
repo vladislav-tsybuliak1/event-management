@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "debug_toolbar",
     "rest_framework_simplejwt",
+    "django_filters",
 
     #custom apps
     "users",
@@ -161,7 +162,10 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": {
         "anon": "10/minute",
         "user": "30/minute"
-    }
+    },
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+    ],
 }
 
 
