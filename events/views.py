@@ -2,8 +2,11 @@ from django.db.models import QuerySet
 from rest_framework import viewsets
 
 from events.models import Event
-from events.serializers import EventSerializer, EventListSerializer, \
-    EventCreateUpdateSerializer
+from events.serializers import (
+    EventSerializer,
+    EventListSerializer,
+    EventCreateUpdateSerializer,
+)
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -19,7 +22,9 @@ class EventViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self) -> QuerySet:
         if self.action == "list":
-            self.queryset = self.queryset.select_related("organizer")
+            self.queryset = self.queryset.select_related(
+                "organizer"
+            ).prefetch_related("participants")
         return self.queryset
 
     def perform_create(self, serializer: EventCreateUpdateSerializer):
