@@ -6,6 +6,7 @@ from events.serializers import (
     EventSerializer,
     EventListSerializer,
     EventCreateUpdateSerializer,
+    EventRetrieveSerializer,
 )
 
 
@@ -16,6 +17,8 @@ class EventViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self) -> type[EventSerializer]:
         if self.action == "list":
             return EventListSerializer
+        if self.action == "retrieve":
+            return EventRetrieveSerializer
         if self.action in ["create", "update", "partial_update"]:
             return EventCreateUpdateSerializer
         return self.serializer_class
