@@ -1,3 +1,4 @@
+from django.utils.timezone import now
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -57,6 +58,14 @@ class EventRetrieveSerializer(EventListSerializer):
 class EventCreateUpdateSerializer(EventSerializer):
     def validate(self, attrs: dict) -> dict:
         data = super().validate(attrs=attrs)
+
+        # Check if the event is already started / is finished
+        if self.instance and self.instance.start_time <= now():
+            raise ValidationError(
+                "This event has already started or is finished and cannot be updated."
+            )
+
+        # Perform time and location validation
         Event.validate_time_and_location(
             start_time=attrs.get(
                 "start_time",
