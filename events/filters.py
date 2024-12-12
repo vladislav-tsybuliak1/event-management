@@ -73,19 +73,3 @@ class EventFilter(django_filters.FilterSet):
         if value and self.request.user.is_authenticated:
             return queryset.filter(organizer=self.request.user)
         return queryset.none()
-
-    def filter_queryset(self, queryset) -> QuerySet:
-        """
-        Override the filter_queryset to prioritize upcoming events before finished events.
-        """
-        queryset = queryset.annotate(
-            priority=Case(
-                When(start_time__gte=now(), then=Value(1)),
-                default=Value(2),
-                output_field=IntegerField(),
-            )
-        )
-
-        queryset = queryset.order_by("priority", "start_time")
-
-        return queryset
