@@ -1,5 +1,6 @@
 import django_filters
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Case, When, Value, IntegerField
+from django.utils.timezone import now
 
 from events.models import Event
 
@@ -72,3 +73,19 @@ class EventFilter(django_filters.FilterSet):
         if value and self.request.user.is_authenticated:
             return queryset.filter(organizer=self.request.user)
         return queryset.none()
+
+    def filter_queryset(self, queryset) -> QuerySet:
+        """
+        Override the filter_queryset to prioritize upcoming events before finished events.
+        """
+        queryset = queryset.annotate(
+            priority=Case(
+                When(start_time__gte=now(), then=Value(1)),
+                default=Value(2),  # Finished events
+                output_field=IntegerField(),
+            )
+        )
+
+        queryset = queryset.order_by("priority", "start_time")
+
+        return queryset
