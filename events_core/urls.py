@@ -25,4 +25,4 @@ urlpatterns = [
     path("api/v1/events/", include("events.urls", namespace="events")),
 ]
 
-urlpatterns += + debug_toolbar_urls()
+urlpatterns += debug_toolbar_urls()
