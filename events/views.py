@@ -1,3 +1,4 @@
+from django.db.models import QuerySet
 from rest_framework import viewsets
 
 from events.models import Event
@@ -13,3 +14,7 @@ class EventViewSet(viewsets.ModelViewSet):
             return EventListSerializer
         return self.serializer_class
 
+    def get_queryset(self) -> QuerySet:
+        if self.action == "list":
+            self.queryset = self.queryset.select_related("organizer")
+        return self.queryset
