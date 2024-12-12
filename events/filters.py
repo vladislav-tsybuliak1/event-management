@@ -73,3 +73,21 @@ class EventFilter(django_filters.FilterSet):
         if value and self.request.user.is_authenticated:
             return queryset.filter(organizer=self.request.user)
         return queryset.none()
+
+    @property
+    def qs(self) -> QuerySet:
+        """
+        Get the queryset with default ordering applied.
+        """
+        queryset = super().qs
+        ordering = self.form.cleaned_data.get("ordering") or ["start_time"]
+        if not isinstance(ordering, (list, tuple)):
+            ordering = [ordering]
+
+        return queryset.annotate(
+            is_upcoming=Case(
+                When(start_time__gte=now(), then=Value(0)),
+                default=Value(1),
+                output_field=IntegerField(),
+            )
+        ).order_by("is_upcoming", *ordering)
