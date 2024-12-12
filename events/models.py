@@ -39,6 +39,7 @@ class Event(models.Model):
         end_time: datetime,
         location: str,
         error_to_raise: type[Exception],
+        current_event_id: int = None,
     ) -> None:
         """
         Validates time and location constraints:
@@ -54,8 +55,14 @@ class Event(models.Model):
             raise error_to_raise("Event starting time must be in the future.")
 
         overlapping_events = Event.objects.filter(
-            location=location, end_time__gt=start_time, start_time__lt=end_time
+            location=location,
+            end_time__gt=start_time,
+            start_time__lt=end_time,
         )
+        if current_event_id:
+            overlapping_events = overlapping_events.exclude(
+                pk=current_event_id
+            )
         if overlapping_events.exists():
             raise error_to_raise(
                 f"An event at '{location}' overlaps with this time period."
@@ -67,6 +74,7 @@ class Event(models.Model):
             end_time=self.end_time,
             location=self.location,
             error_to_raise=ValidationError,
+            current_event_id=self.pk,
         )
 
     def save(self, *args, **kwargs) -> None:

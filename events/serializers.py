@@ -54,5 +54,6 @@ class EventCreateUpdateSerializer(EventSerializer):
                 self.instance.location if self.instance else None,
             ),
             error_to_raise=ValidationError,
+            current_event_id=self.instance.pk if self.instance else None,
         )
         return data
