@@ -31,6 +31,19 @@ class EventFilter(django_filters.FilterSet):
         method="filter_organizing",
         label="Events I organize",
     )
+    ordering = django_filters.OrderingFilter(
+        fields=(
+            ("start_time", "start_time"),
+            ("title", "title"),
+            ("location", "location"),
+        ),
+        field_labels={
+            "start_time": "Start time",
+            "title": "Title",
+            "location": "Location",
+        },
+        label="Order by",
+    )
 
     class Meta:
         model = Event
@@ -41,6 +54,7 @@ class EventFilter(django_filters.FilterSet):
             "start_date",
             "participating",
             "organizing",
+            "ordering",
         )
 
     def filter_participating(self, queryset, name, value) -> QuerySet:
