@@ -1,7 +1,9 @@
 from django.db.models import QuerySet
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from events.models import Event
+from events.permissions import IsOrganizerOrReadOnly
 from events.serializers import (
     EventSerializer,
     EventListSerializer,
@@ -13,6 +15,7 @@ from events.serializers import (
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOrganizerOrReadOnly]
 
     def get_serializer_class(self) -> type[EventSerializer]:
         if self.action == "list":
