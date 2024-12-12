@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from events.models import Event
 
@@ -34,3 +35,24 @@ class EventListSerializer(EventSerializer):
 
     def get_end_time(self, obj: Event) -> str:
         return obj.end_time.strftime("%d %b %Y %H:%M")
+
+
+class EventCreateUpdateSerializer(EventSerializer):
+    def validate(self, attrs: dict) -> dict:
+        data = super().validate(attrs=attrs)
+        Event.validate_time_and_location(
+            start_time=attrs.get(
+                "start_time",
+                self.instance.start_time if self.instance else None,
+            ),
+            end_time=attrs.get(
+                "end_time",
+                self.instance.end_time if self.instance else None,
+            ),
+            location=attrs.get(
+                "location",
+                self.instance.location if self.instance else None,
+            ),
+            error_to_raise=ValidationError,
+        )
+        return data
