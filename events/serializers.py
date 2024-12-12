@@ -9,6 +9,10 @@ class EventSerializer(serializers.ModelSerializer):
         source="organizer.username",
         read_only=True,
     )
+    participants = serializers.IntegerField(
+        source="participants.count",
+        read_only=True,
+    )
     class Meta:
         model = Event
         fields = (
@@ -19,10 +23,12 @@ class EventSerializer(serializers.ModelSerializer):
             "end_time",
             "location",
             "organizer",
+            "participants",
         )
         read_only_fields = (
             "id",
             "organizer",
+            "participants",
         )
 
 
