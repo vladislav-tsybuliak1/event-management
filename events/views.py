@@ -24,7 +24,7 @@ class EventViewSet(viewsets.ModelViewSet):
         return self.serializer_class
 
     def get_queryset(self) -> QuerySet:
-        if self.action == "list":
+        if self.action in ["list", "retrieve"]:
             self.queryset = self.queryset.select_related(
                 "organizer"
             ).prefetch_related("participants")
