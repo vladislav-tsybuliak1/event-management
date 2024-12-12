@@ -123,6 +123,21 @@ class EventViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        # Sending email about successful canceling of the registration
+        subject = f"You've canceled you registration at {event.title}"
+        message = CANCEL_REGISTRATION_HTML_CONTENT.format(
+            username=request.user.username,
+            event=event.title,
+        )
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[request.user.email],
+            fail_silently=True,
+            html_message=message,
+        )
+
         # Unregister the user
         event.participants.remove(request.user)
         return Response(
