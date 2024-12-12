@@ -19,6 +19,7 @@ from email_templates.event_cancel_registration_template import (
 from events.filters import EventFilter
 from events.models import Event
 from events.permissions import IsOrganizerOrReadOnly
+from events.schemas.events import event_schema
 from events.serializers import (
     EventSerializer,
     EventListSerializer,
@@ -27,6 +28,7 @@ from events.serializers import (
 )
 
 
+@event_schema
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
