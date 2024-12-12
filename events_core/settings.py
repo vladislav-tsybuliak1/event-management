@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "rest_framework_simplejwt",
     "django_filters",
+    "drf_spectacular",
 
     #custom apps
     "users",
