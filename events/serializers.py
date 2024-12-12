@@ -43,6 +43,17 @@ class EventListSerializer(EventSerializer):
         return obj.end_time.strftime("%d %b %Y %H:%M")
 
 
+class EventRetrieveSerializer(EventListSerializer):
+    participants = serializers.SerializerMethodField()
+
+    def get_participants(self, obj: Event) -> list[str]:
+        return [
+            f"{participant.username} ({participant.email})"
+            for participant
+            in obj.participants.all()
+        ]
+
+
 class EventCreateUpdateSerializer(EventSerializer):
     def validate(self, attrs: dict) -> dict:
         data = super().validate(attrs=attrs)
