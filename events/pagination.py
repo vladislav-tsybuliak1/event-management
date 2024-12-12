@@ -1,3 +1,5 @@
+from sys import stdout
+
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
@@ -17,3 +19,35 @@ class EventPaginator(PageNumberPagination):
                 "results": data,
             }
         )
+
+    def get_paginated_response_schema(self, schema) -> dict:
+        return {
+            "type": "object",
+            "properties": {
+                "pages": {
+                    "type": "integer",
+                    "example": 4,
+                },
+                "count": {
+                    "type": "integer",
+                    "example": 18,
+                },
+                "next": {
+                    "type": "string",
+                    "nullable": True,
+                    "format": "uri",
+                    "example": (
+                        "http://localhost:8000/api/v1/events/?page=3"
+                    )
+                },
+                "previous": {
+                    "type": "string",
+                    "nullable": True,
+                    "format": "uri",
+                    "example": (
+                        "http://localhost:8000/api/v1/train-events/?page=1"
+                    )
+                },
+                "results": schema
+            },
+        }
