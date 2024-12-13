@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.mail import send_mail
 from django.db.models import QuerySet
+from django.utils.timezone import now
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import (
@@ -112,6 +113,13 @@ class EventViewSet(viewsets.ModelViewSet):
         if request.user in event.participants.all():
             return Response(
                 {"detail": "You are already registered for this event."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Check if the event started or is in the past
+        if event.start_time < now():
+            return Response(
+                {"detail": "You cannot register for the event that have already started or is finished"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
