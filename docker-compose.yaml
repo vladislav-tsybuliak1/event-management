@@ -12,6 +12,10 @@ services:
       sh -c "python manage.py wait_for_db &&
             python manage.py migrate &&
             python manage.py runserver 0.0.0.0:8000"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000" ]
+      interval: 10s
+      retries: 5
     depends_on:
       - db
 
@@ -24,6 +28,39 @@ services:
       - "5432:5432"
     volumes:
       - my_db:$PGDATA
+
+  celery:
+    build:
+      context: .
+    volumes:
+      - ./:/app
+    command: >
+      sh -c "celery -A events_core worker --loglevel=info"
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7.4.1
+    expose:
+      - 6379
+    restart: always
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+
+  redis-admin:
+    image: rediscommander/redis-commander:latest
+    ports:
+      - "8081:8081"
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8081 || exit 1" ]
+      interval: 60s
+      timeout: 10s
+      retries: 5
 
 volumes:
   my_db:

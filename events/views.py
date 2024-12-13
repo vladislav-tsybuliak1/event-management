@@ -28,6 +28,7 @@ from events.serializers import (
     EventCreateUpdateSerializer,
     EventRetrieveSerializer,
 )
+import events.tasks
 
 
 @event_schema
@@ -75,17 +76,16 @@ class EventViewSet(viewsets.ModelViewSet):
                 location=updated_event.location,
                 organizer_email=updated_event.organizer.email,
             )
-            participant_emails = updated_event.participants.values_list(
-                "email",
-                flat=True,
+            participant_emails = list(
+                updated_event.participants.values_list(
+                    "email",
+                    flat=True,
+                )
             )
-            django.core.mail.send_mail(
+            events.tasks.send_email_notification.delay(
                 subject=subject,
                 message=message,
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=participant_emails,
-                fail_silently=True,
-                html_message=message,
+                emails=participant_emails,
             )
 
     @action(
@@ -124,6 +124,9 @@ class EventViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        # Register the user
+        event.participants.add(request.user)
+
         # Sending email about successful registration
         subject = f"You are registered at {event.title}"
         message = REGISTRATION_HTML_CONTENT.format(
@@ -134,17 +137,10 @@ class EventViewSet(viewsets.ModelViewSet):
             location=event.location,
             organizer_email=event.organizer.email,
         )
-        django.core.mail.send_mail(
-            subject=subject,
-            message=message,
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[request.user.email],
-            fail_silently=True,
-            html_message=message,
+        events.tasks.send_email_notification.delay(
+            subject=subject, message=message, emails=[request.user.email]
         )
 
-        # Register the user
-        event.participants.add(request.user)
         return Response(
             {"detail": "Successfully registered for the event."},
             status=status.HTTP_200_OK,
@@ -179,23 +175,21 @@ class EventViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        # Unregister the user
+        event.participants.remove(request.user)
+
         # Sending email about successful canceling of the registration
         subject = f"You've canceled you registration at {event.title}"
         message = CANCEL_REGISTRATION_HTML_CONTENT.format(
             username=request.user.username,
             event=event.title,
         )
-        django.core.mail.send_mail(
+        events.tasks.send_email_notification.delay(
             subject=subject,
             message=message,
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[request.user.email],
-            fail_silently=True,
-            html_message=message,
+            emails=[request.user.email],
         )
 
-        # Unregister the user
-        event.participants.remove(request.user)
         return Response(
             {"detail": "Successfully unregistered from the event."},
             status=status.HTTP_200_OK,

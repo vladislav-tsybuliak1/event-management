@@ -324,7 +324,7 @@ class AuthenticatedEventApiTests(TestCase):
         response = self.client.post(EVENT_URL, self.payload)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    @mock.patch("django.core.mail.send_mail")
+    @mock.patch("events.tasks.send_email_notification.delay")
     @mock.patch("django.utils.timezone.now", return_value=NOW_MOCKED_VALUE)
     def test_update_own_event_sends_email(
         self,
@@ -356,7 +356,7 @@ class AuthenticatedEventApiTests(TestCase):
         )
         self.assertEqual(self.user.id, self.own_event.organizer_id)
 
-    @mock.patch("django.core.mail.send_mail")
+    @mock.patch("events.tasks.send_email_notification.delay")
     @mock.patch("django.utils.timezone.now", return_value=NOW_MOCKED_VALUE)
     def test_update_not_own_event_forbidden(
         self,
@@ -368,7 +368,7 @@ class AuthenticatedEventApiTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    @mock.patch("django.core.mail.send_mail")
+    @mock.patch("events.tasks.send_email_notification.delay")
     @mock.patch("django.utils.timezone.now", return_value=NOW_MOCKED_VALUE)
     def test_partially_update_own_event_sends_email(
         self,
@@ -392,7 +392,7 @@ class AuthenticatedEventApiTests(TestCase):
             self.own_event.end_time.strftime("%Y-%m-%d %H:%M"),
         )
 
-    @mock.patch("django.core.mail.send_mail")
+    @mock.patch("events.tasks.send_email_notification.delay")
     @mock.patch("django.utils.timezone.now", return_value=NOW_MOCKED_VALUE)
     def test_partially_update_own_event_forbidden(
         self,
@@ -420,7 +420,7 @@ class AuthenticatedEventApiTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTrue(event_exists)
 
-    @mock.patch("django.core.mail.send_mail")
+    @mock.patch("events.tasks.send_email_notification.delay")
     @mock.patch("django.utils.timezone.now", return_value=NOW_MOCKED_VALUE)
     def test_register_for_the_event(
         self,
@@ -439,7 +439,7 @@ class AuthenticatedEventApiTests(TestCase):
             self.not_participate_in_event.participants.all(),
         )
 
-    @mock.patch("django.core.mail.send_mail")
+    @mock.patch("events.tasks.send_email_notification.delay")
     @mock.patch("django.utils.timezone.now", return_value=NOW_MOCKED_VALUE)
     def test_register_for_the_own_event_error(
         self,
@@ -457,7 +457,7 @@ class AuthenticatedEventApiTests(TestCase):
             self.own_event.participants.all(),
         )
 
-    @mock.patch("django.core.mail.send_mail")
+    @mock.patch("events.tasks.send_email_notification.delay")
     @mock.patch("django.utils.timezone.now", return_value=NOW_MOCKED_VALUE)
     def test_register_for_the_already_registered_event_error(
         self,
@@ -470,7 +470,7 @@ class AuthenticatedEventApiTests(TestCase):
         mocked_send_mail.assert_not_called()
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    @mock.patch("django.core.mail.send_mail")
+    @mock.patch("events.tasks.send_email_notification.delay")
     @mock.patch("django.utils.timezone.now", return_value=NOW_MOCKED_VALUE)
     def test_register_for_the_past_event_error(
             self,
@@ -489,7 +489,7 @@ class AuthenticatedEventApiTests(TestCase):
             self.not_participate_in_past_event.participants.all(),
         )
 
-    @mock.patch("django.core.mail.send_mail")
+    @mock.patch("events.tasks.send_email_notification.delay")
     @mock.patch("django.utils.timezone.now", return_value=NOW_MOCKED_VALUE)
     def test_unregister_from_the_event(
             self,
@@ -508,7 +508,7 @@ class AuthenticatedEventApiTests(TestCase):
             self.participate_in_event.participants.all(),
         )
 
-    @mock.patch("django.core.mail.send_mail")
+    @mock.patch("events.tasks.send_email_notification.delay")
     @mock.patch("django.utils.timezone.now", return_value=NOW_MOCKED_VALUE)
     def test_unregister_from_the_event_you_are_not_in_error(
             self,

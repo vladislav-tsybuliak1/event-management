@@ -121,6 +121,8 @@ Use the credentials from the superuser created earlier to log in.
 - **Swagger documentation**
 - **Filtering events**: By location, title, starting date, organizer, organized events by user, events user participates in.
 - **Ordering events**: By location, title, starting date.
+- **Celery usage for background tasks**
+- **Redis usage for caching**: Redis-command: http://localhost:8081
 - **Email notifications**: Receive email notifications upon event registration, cancelling registration, any time or location updates.
 
 ### Examples of email messages:

@@ -208,3 +208,12 @@ SPECTACULAR_SETTINGS = {
         "defaultModelExpandDepth": 2,
     },
 }
+
+
+# Celery Configuration Options
+
+CELERY_BROKER_URL = f"redis://{os.getenv('REDIS_HOST')}:{os.getenv('REDIS_PORT')}"
+CELERY_RESULT_BACKEND = f"redis://{os.getenv('REDIS_HOST')}:{os.getenv('REDIS_PORT')}"
+CELERY_TIMEZONE = "UTC"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
