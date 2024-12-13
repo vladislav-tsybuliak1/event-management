@@ -170,6 +170,15 @@ class EventViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        # Check if the event started or is in the past
+        if event.start_time < django.utils.timezone.now():
+            return Response(
+                {
+                    "detail": "You cannot unregister from the event that have already started or is finished"
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         # Sending email about successful canceling of the registration
         subject = f"You've canceled you registration at {event.title}"
         message = CANCEL_REGISTRATION_HTML_CONTENT.format(
