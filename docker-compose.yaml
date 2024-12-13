@@ -35,7 +35,7 @@ services:
     volumes:
       - ./:/app
     command: >
-      sh -c "celery -A event_management worker --loglevel=info"
+      sh -c "celery -A events_core worker --loglevel=info"
     depends_on:
       - redis
 
