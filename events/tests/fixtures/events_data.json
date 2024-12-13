@@ -404,5 +404,18 @@
       "organizer": 3,
       "participants": []
     }
+  },
+  {
+    "model": "events.event",
+    "pk": 13,
+    "fields": {
+      "title": "Product Launch",
+      "description": "Official launch event for the company's new product.",
+      "start_time": "2023-03-30T11:00:00Z",
+      "end_time": "2023-03-30T14:00:00Z",
+      "location": "Main Auditorium",
+      "organizer": 3,
+      "participants": []
+    }
   }
 ]
