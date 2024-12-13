@@ -40,7 +40,7 @@ services:
       - redis
 
   redis:
-    image: redis:latest
+    image: redis:7.4.1
     expose:
       - 6379
     restart: always
