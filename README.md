@@ -148,5 +148,11 @@ Run locally (if you're running locally) or in event_management Docker container 
     python manage.py test users.tests
     ```
 
+3. **Test everything**:
+
+    ```bash
+    python manage.py test
+    ```
+
 ## Contact
 For any inquiries, please contact [vladislav.tsybuliak@gmail.com](mailto:vladislav.tsybuliak@gmail.com).
