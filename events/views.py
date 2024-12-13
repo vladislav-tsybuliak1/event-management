@@ -110,7 +110,7 @@ class EventViewSet(viewsets.ModelViewSet):
             )
 
         # Check if the user is already registered
-        if request.user in event.participants.all():
+        if event.participants.filter(id=request.user.id).exists():
             return Response(
                 {"detail": "You are already registered for this event."},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -163,7 +163,7 @@ class EventViewSet(viewsets.ModelViewSet):
         event = self.get_object()
 
         # Check if the user is not in event participants
-        if request.user not in event.participants.all():
+        if not event.participants.filter(id=request.user.id).exists():
             return Response(
                 {"detail": "You are not registered for this event."},
                 status=status.HTTP_400_BAD_REQUEST,
