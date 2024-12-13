@@ -50,3 +50,59 @@ list_example_json = [
         "participants": 5,
     },
 ]
+
+create_update_request_example_json = {
+    "title": "Product Launch",
+    "description": "Official launch event for the company's new product.",
+    "start_time": "2025-03-30T14:00:00",
+    "end_time": "2025-03-30T17:00:00",
+    "location": "Main Auditorium",
+}
+
+create_update_response_example_json = {
+    "id": 13,
+    "title": "Product Launch",
+    "description": "Official launch event for the company's new product.",
+    "start_time": "2025-03-30T14:00:00Z",
+    "end_time": "2025-03-30T17:00:00Z",
+    "location": "Main Auditorium",
+    "organizer": "SkyWalker89 (sky.walker@test.com)",
+    "participants": 0,
+}
+
+unauthorised_401_no_token_example_json = {
+    "detail": "Authentication credentials were not provided."
+}
+
+unauthorised_401_invalid_token_example_json = {
+    "detail": "Given token not valid for any token type",
+    "code": "token_not_valid",
+    "messages": [
+        {
+            "token_class": "AccessToken",
+            "token_type": "access",
+            "message": "Token is invalid or expired",
+        }
+    ],
+}
+
+bad_request_400_empty_fields = {
+    "title": ["This field is required."],
+    "start_time": ["This field is required."],
+    "end_time": ["This field is required."],
+    "location": ["This field is required."],
+}
+
+bad_request_400_overlapping_event = {
+    "non_field_errors": [
+        "An event at 'Main Auditorium' overlaps with this time period."
+    ]
+}
+
+bad_request_400_event_in_the_past = {
+    "non_field_errors": ["Event starting time must be in the future."]
+}
+
+bad_request_400_end_time_before_start_time = {
+    "non_field_errors": ["Event starting time must be before its ending time."]
+}
