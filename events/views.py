@@ -1,7 +1,7 @@
+import django.utils.timezone
+import django.core.mail
 from django.conf import settings
-from django.core.mail import send_mail
 from django.db.models import QuerySet
-from django.utils.timezone import now
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import (
@@ -58,7 +58,6 @@ class EventViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer: EventCreateUpdateSerializer):
         event = self.get_object()
-
         updated_event = serializer.save()
 
         # Check if start_time, end_time, or location have changed
@@ -80,7 +79,7 @@ class EventViewSet(viewsets.ModelViewSet):
                 "email",
                 flat=True,
             )
-            send_mail(
+            django.core.mail.send_mail(
                 subject=subject,
                 message=message,
                 from_email=settings.EMAIL_HOST_USER,
@@ -117,9 +116,11 @@ class EventViewSet(viewsets.ModelViewSet):
             )
 
         # Check if the event started or is in the past
-        if event.start_time < now():
+        if event.start_time < django.utils.timezone.now():
             return Response(
-                {"detail": "You cannot register for the event that have already started or is finished"},
+                {
+                    "detail": "You cannot register for the event that have already started or is finished"
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -133,7 +134,7 @@ class EventViewSet(viewsets.ModelViewSet):
             location=event.location,
             organizer_email=event.organizer.email,
         )
-        send_mail(
+        django.core.mail.send_mail(
             subject=subject,
             message=message,
             from_email=settings.EMAIL_HOST_USER,
@@ -175,7 +176,7 @@ class EventViewSet(viewsets.ModelViewSet):
             username=request.user.username,
             event=event.title,
         )
-        send_mail(
+        django.core.mail.send_mail(
             subject=subject,
             message=message,
             from_email=settings.EMAIL_HOST_USER,

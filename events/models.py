@@ -1,9 +1,9 @@
 from datetime import datetime
 
+import django.utils.timezone
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils.timezone import now
 
 
 class Event(models.Model):
@@ -51,7 +51,7 @@ class Event(models.Model):
             raise error_to_raise(
                 "Event starting time must be before its ending time."
             )
-        if start_time < now():
+        if start_time < django.utils.timezone.now():
             raise error_to_raise("Event starting time must be in the future.")
 
         overlapping_events = Event.objects.filter(
