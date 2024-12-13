@@ -272,4 +272,13 @@ event_schema = extend_schema_view(
             status.HTTP_404_NOT_FOUND: NOT_FOUND_OPEN_API_RESPONSE,
         },
     ),
+    destroy=extend_schema(
+        description="Delete event",
+        responses={
+            status.HTTP_204_NO_CONTENT: None,
+            status.HTTP_401_UNAUTHORIZED: UNAUTHORISED_OPEN_API_RESPONSE,
+            status.HTTP_403_FORBIDDEN: FORBIDDEN_OPEN_API_RESPONSE,
+            status.HTTP_404_NOT_FOUND: NOT_FOUND_OPEN_API_RESPONSE,
+        }
+    ),
 )
