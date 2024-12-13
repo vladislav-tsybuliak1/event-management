@@ -1,6 +1,6 @@
 import django_filters
+import django.utils.timezone
 from django.db.models import QuerySet, Case, When, Value, IntegerField
-from django.utils.timezone import now
 
 from events.models import Event
 
@@ -83,10 +83,9 @@ class EventFilter(django_filters.FilterSet):
         ordering = self.form.cleaned_data.get("ordering") or ["start_time"]
         if not isinstance(ordering, (list, tuple)):
             ordering = [ordering]
-
         return queryset.annotate(
             is_upcoming=Case(
-                When(start_time__gte=now(), then=Value(0)),
+                When(start_time__gte=django.utils.timezone.now(), then=Value(0)),
                 default=Value(1),
                 output_field=IntegerField(),
             )
