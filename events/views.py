@@ -69,13 +69,13 @@ class EventViewSet(viewsets.ModelViewSet):
             # Sending email about update
             subject = f"Event {event.title} was updated"
             message = UPDATE_HTML_CONTENT.format(
-                event=event.title,
-                start_time=event.start_time.strftime("%d %b %Y %H:%M"),
-                end_time=event.end_time.strftime("%d %b %Y %H:%M"),
-                location=event.location,
-                organizer_email=event.organizer.email,
+                event=updated_event.title,
+                start_time=updated_event.start_time.strftime("%d %b %Y %H:%M"),
+                end_time=updated_event.end_time.strftime("%d %b %Y %H:%M"),
+                location=updated_event.location,
+                organizer_email=updated_event.organizer.email,
             )
-            participant_emails = event.participants.values_list(
+            participant_emails = updated_event.participants.values_list(
                 "email",
                 flat=True,
             )
