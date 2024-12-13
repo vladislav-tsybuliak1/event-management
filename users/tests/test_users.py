@@ -94,3 +94,53 @@ class PublicUserApiTests(TestCase):
             .exists()
         )
         self.assertFalse(user_exists)
+
+
+class PrivateUserApiTests(TestCase):
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.create_user(
+            username="Test",
+            email="test@test.com",
+            password="test123test",
+        )
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+
+        self.payload = {
+            "username": "New_Test",
+            "email": "newtest@test.com",
+            "password": "newtest123test",
+        }
+
+    def test_retrieve_user_info(self) -> None:
+        response = self.client.get(MANAGE_USER_URL)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["username"], self.user.username)
+        self.assertEqual(response.data["email"], self.user.email)
+        self.assertNotIn("password", response.data)
+
+    def test_update_user_info(self) -> None:
+        response = self.client.put(MANAGE_USER_URL, self.payload)
+        self.user.refresh_from_db()
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(self.user.username, self.payload["username"])
+        self.assertEqual(self.user.email, self.payload["email"])
+        self.assertTrue(self.user.check_password(self.payload["password"]))
+
+    def test_partial_update_user_info(self) -> None:
+        self.payload.pop("password")
+
+        response = self.client.patch(MANAGE_USER_URL, self.payload)
+        self.user.refresh_from_db()
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(self.user.email, self.payload["email"])
+        self.assertTrue(self.user.check_password("test123test"))
+
+    def test_unauthorized_user_cannot_access_profile(self) -> None:
+        self.client.force_authenticate(user=None)
+        response = self.client.get(MANAGE_USER_URL)
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
