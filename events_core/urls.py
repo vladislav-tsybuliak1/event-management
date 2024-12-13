@@ -24,21 +24,25 @@ from drf_spectacular.views import (
     SpectacularRedocView,
 )
 
-urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("api/v1/users/", include("users.urls", namespace="users")),
-    path("api/v1/events/", include("events.urls", namespace="events")),
-    path("api/v1/schema/", SpectacularAPIView.as_view(), name="schema"),
+api_patterns = [
+    path("users/", include("users.urls", namespace="users")),
+    path("events/", include("events.urls", namespace="events")),
+    path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
-        "api/v1/doc/swagger/",
+        "doc/swagger/",
         SpectacularSwaggerView.as_view(url_name="schema"),
         name="swagger",
     ),
     path(
-        "api/v1/doc/redoc/",
+        "doc/redoc/",
         SpectacularRedocView.as_view(url_name="schema"),
         name="redoc",
     ),
+]
+
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("api/v1/", include(api_patterns)),
 ]
 
 urlpatterns += debug_toolbar_urls()
