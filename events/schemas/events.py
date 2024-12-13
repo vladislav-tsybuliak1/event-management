@@ -20,7 +20,8 @@ from events.schemas.examples.events import (
     bad_request_400_end_time_before_start_time,
     detail_example_json,
     not_found_404,
-    bad_request_400_update_past_event, forbidden_403,
+    bad_request_400_update_past_event,
+    forbidden_403,
 )
 from events.serializers import (
     EventListSerializer,
@@ -66,7 +67,7 @@ FORBIDDEN_OPEN_API_RESPONSE = OpenApiResponse(
             value=forbidden_403,
             response_only=True,
         ),
-    ]
+    ],
 )
 
 CREATE_UPDATE_REQUEST_EXAMPLE = OpenApiExample(
@@ -236,6 +237,30 @@ event_schema = extend_schema_view(
                 response=OpenApiTypes.OBJECT,
                 examples=[
                     EMPTY_FIELDS_OPEN_API_EXAMPLE,
+                    UPDATE_PAST_EVENT_OPEN_API_EXAMPLE,
+                    OVERLAPPING_EVENTS_OPEN_API_EXAMPLE,
+                    CREATE_UPDATE_PAST_EVENT_OPEN_API_EXAMPLE,
+                    CREATE_UPDATE_END_TIME_BEFORE_START_TIME_OPEN_API_EXAMPLE,
+                ],
+            ),
+            status.HTTP_401_UNAUTHORIZED: UNAUTHORISED_OPEN_API_RESPONSE,
+            status.HTTP_403_FORBIDDEN: FORBIDDEN_OPEN_API_RESPONSE,
+            status.HTTP_404_NOT_FOUND: NOT_FOUND_OPEN_API_RESPONSE,
+        },
+    ),
+    partial_update=extend_schema(
+        description="Partial update event information",
+        request=EventCreateUpdateSerializer(partial=True),
+        examples=[
+            CREATE_UPDATE_REQUEST_EXAMPLE,
+            CREATE_UPDATE_RESPONSE_EXAMPLE,
+        ],
+        responses={
+            status.HTTP_200_OK: EventCreateUpdateSerializer(partial=True),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
+                description="Bad request, invalid data",
+                response=OpenApiTypes.OBJECT,
+                examples=[
                     UPDATE_PAST_EVENT_OPEN_API_EXAMPLE,
                     OVERLAPPING_EVENTS_OPEN_API_EXAMPLE,
                     CREATE_UPDATE_PAST_EVENT_OPEN_API_EXAMPLE,
