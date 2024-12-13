@@ -36,7 +36,7 @@ def annotate_priority(queryset: QuerySet, *ordering) -> QuerySet:
     ).order_by("is_upcoming", *ordering)
 
 
-class NotAuthenticatedTripApiTests(TestCase):
+class NotAuthenticatedEventApiTests(TestCase):
     fixtures = ["events/tests/fixtures/events_data.json"]
 
     def setUp(self) -> None:
