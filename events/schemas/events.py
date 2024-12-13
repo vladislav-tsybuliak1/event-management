@@ -22,6 +22,8 @@ from events.schemas.examples.events import (
     not_found_404,
     bad_request_400_update_past_event,
     forbidden_403,
+    ok_200_registered,
+    bad_request_400_already_registered, bad_request_400_organizer_registering,
 )
 from events.serializers import (
     EventListSerializer,
@@ -279,6 +281,41 @@ event_schema = extend_schema_view(
             status.HTTP_401_UNAUTHORIZED: UNAUTHORISED_OPEN_API_RESPONSE,
             status.HTTP_403_FORBIDDEN: FORBIDDEN_OPEN_API_RESPONSE,
             status.HTTP_404_NOT_FOUND: NOT_FOUND_OPEN_API_RESPONSE,
-        }
+        },
+    ),
+    register=extend_schema(
+        description="Register for the event",
+        request=None,
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description="Successful register",
+                response=OpenApiTypes.OBJECT,
+                examples=[
+                    OpenApiExample(
+                        name="Successful register example",
+                        value=ok_200_registered,
+                        response_only=True,
+                    )
+                ],
+            ),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
+                description="Bad request, invalid data",
+                response=OpenApiTypes.OBJECT,
+                examples=[
+                    OpenApiExample(
+                        name="Already registered example",
+                        value=bad_request_400_already_registered,
+                        response_only=True,
+                    ),
+                    OpenApiExample(
+                        name="Organizer registering example",
+                        value=bad_request_400_organizer_registering,
+                        response_only=True,
+                    ),
+                ],
+            ),
+            status.HTTP_401_UNAUTHORIZED: UNAUTHORISED_OPEN_API_RESPONSE,
+            status.HTTP_404_NOT_FOUND: NOT_FOUND_OPEN_API_RESPONSE,
+        },
     ),
 )

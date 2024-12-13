@@ -130,6 +130,18 @@ bad_request_400_update_past_event = {
     ]
 }
 
+bad_request_400_already_registered = {
+    "detail": "You are already registered for this event."
+}
+
+bad_request_400_organizer_registering = {
+    "detail": "You are the organizer of this event."
+}
+
+ok_200_registered = {
+    "detail": "Successfully registered for the event."
+}
+
 not_found_404 = {"detail": "No Event matches the given query."}
 
 forbidden_403 = {
