@@ -2,7 +2,7 @@ from datetime import datetime
 from unittest import mock
 
 from django.contrib.auth import get_user_model
-from django.db.models import QuerySet, Case, When, Value, IntegerField
+from django.db.models import QuerySet, Case, When, Value, IntegerField, Q
 from django.test import TestCase
 import django.utils.timezone
 from rest_framework import status
@@ -24,6 +24,14 @@ NOW_MOCKED_VALUE = django.utils.timezone.make_aware(
 
 def detail_url(event_id: int) -> str:
     return reverse("events:event-detail", args=[event_id])
+
+
+def register_url(event_id: int) -> str:
+    return reverse("events:event-register", args=[event_id])
+
+
+def unregister_url(event_id: int) -> str:
+    return reverse("events:event-unregister", args=[event_id])
 
 
 def annotate_priority(queryset: QuerySet, *ordering) -> QuerySet:
@@ -182,6 +190,14 @@ class NotAuthenticatedEventApiTests(TestCase):
         response = self.client.delete(detail_url(self.event.id))
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_register_error(self) -> None:
+        response = self.client.post(register_url(self.event.id))
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_unregister_error(self) -> None:
+        response = self.client.post(unregister_url(self.event.id))
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
 
 class AuthenticatedEventApiTests(TestCase):
     fixtures = ["events/tests/fixtures/events_data.json"]
@@ -214,6 +230,20 @@ class AuthenticatedEventApiTests(TestCase):
         self.not_own_event = (
             Event.objects.filter(start_time__gt=NOW_MOCKED_VALUE)
             .exclude(organizer=self.user)
+            .first()
+        )
+        self.participate_in_event = Event.objects.filter(
+            participants=self.user,
+            start_time__gt=NOW_MOCKED_VALUE,
+        ).first()
+        self.not_participate_in_event = (
+            Event.objects.filter(start_time__gt=NOW_MOCKED_VALUE)
+            .exclude(Q(participants=self.user) | Q(organizer=self.user))
+            .first()
+        )
+        self.not_participate_in_past_event = (
+            Event.objects.filter(start_time__lt=NOW_MOCKED_VALUE)
+            .exclude(Q(participants=self.user) | Q(organizer=self.user))
             .first()
         )
 
@@ -313,7 +343,9 @@ class AuthenticatedEventApiTests(TestCase):
         self.assertEqual(
             self.updated_payload["description"], self.own_event.description
         )
-        self.assertEqual(self.updated_payload["location"], self.own_event.location)
+        self.assertEqual(
+            self.updated_payload["location"], self.own_event.location
+        )
         self.assertEqual(
             self.updated_payload["start_time"],
             self.own_event.start_time.strftime("%Y-%m-%d %H:%M"),
@@ -327,9 +359,9 @@ class AuthenticatedEventApiTests(TestCase):
     @mock.patch("django.core.mail.send_mail")
     @mock.patch("django.utils.timezone.now", return_value=NOW_MOCKED_VALUE)
     def test_update_not_own_event_forbidden(
-            self,
-            mocked_now,
-            mocked_send_mail,
+        self,
+        mocked_now,
+        mocked_send_mail,
     ) -> None:
         response = self.client.put(
             detail_url(self.not_own_event.id), self.updated_payload
@@ -339,9 +371,9 @@ class AuthenticatedEventApiTests(TestCase):
     @mock.patch("django.core.mail.send_mail")
     @mock.patch("django.utils.timezone.now", return_value=NOW_MOCKED_VALUE)
     def test_partially_update_own_event_sends_email(
-            self,
-            mocked_now,
-            mocked_send_mail,
+        self,
+        mocked_now,
+        mocked_send_mail,
     ) -> None:
         response = self.client.patch(
             detail_url(self.own_event.id), self.partial_updated_payload
@@ -363,9 +395,9 @@ class AuthenticatedEventApiTests(TestCase):
     @mock.patch("django.core.mail.send_mail")
     @mock.patch("django.utils.timezone.now", return_value=NOW_MOCKED_VALUE)
     def test_partially_update_own_event_forbidden(
-            self,
-            mocked_now,
-            mocked_send_mail,
+        self,
+        mocked_now,
+        mocked_send_mail,
     ) -> None:
         response = self.client.put(
             detail_url(self.not_own_event.id), self.partial_updated_payload
@@ -387,3 +419,104 @@ class AuthenticatedEventApiTests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTrue(event_exists)
+
+    @mock.patch("django.core.mail.send_mail")
+    @mock.patch("django.utils.timezone.now", return_value=NOW_MOCKED_VALUE)
+    def test_register_for_the_event(
+        self,
+        mocked_now,
+        mocked_send_mail,
+    ) -> None:
+        response = self.client.post(
+            register_url(self.not_participate_in_event.id)
+        )
+        self.not_participate_in_event.refresh_from_db()
+
+        mocked_send_mail.assert_called_once()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn(
+            self.user,
+            self.not_participate_in_event.participants.all(),
+        )
+
+    @mock.patch("django.core.mail.send_mail")
+    @mock.patch("django.utils.timezone.now", return_value=NOW_MOCKED_VALUE)
+    def test_register_for_the_own_event_error(
+        self,
+        mocked_now,
+        mocked_send_mail,
+    ) -> None:
+        response = self.client.post(
+            register_url(self.own_event.id)
+        )
+
+        mocked_send_mail.assert_not_called()
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertNotIn(
+            self.user,
+            self.own_event.participants.all(),
+        )
+
+    @mock.patch("django.core.mail.send_mail")
+    @mock.patch("django.utils.timezone.now", return_value=NOW_MOCKED_VALUE)
+    def test_register_for_the_already_registered_event_error(
+        self,
+        mocked_now,
+        mocked_send_mail,
+    ) -> None:
+        response = self.client.post(
+            register_url(self.participate_in_event.id)
+        )
+        mocked_send_mail.assert_not_called()
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    @mock.patch("django.core.mail.send_mail")
+    @mock.patch("django.utils.timezone.now", return_value=NOW_MOCKED_VALUE)
+    def test_register_for_the_past_event_error(
+            self,
+            mocked_now,
+            mocked_send_mail,
+    ) -> None:
+        response = self.client.post(
+            register_url(self.not_participate_in_past_event.id)
+        )
+        self.not_participate_in_past_event.refresh_from_db()
+
+        mocked_send_mail.assert_not_called()
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertNotIn(
+            self.user,
+            self.not_participate_in_past_event.participants.all(),
+        )
+
+    @mock.patch("django.core.mail.send_mail")
+    @mock.patch("django.utils.timezone.now", return_value=NOW_MOCKED_VALUE)
+    def test_unregister_from_the_event(
+            self,
+            mocked_now,
+            mocked_send_mail,
+    ) -> None:
+        response = self.client.post(
+            unregister_url(self.participate_in_event.id)
+        )
+        self.participate_in_event.refresh_from_db()
+
+        mocked_send_mail.assert_called_once()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotIn(
+            self.user,
+            self.participate_in_event.participants.all(),
+        )
+
+    @mock.patch("django.core.mail.send_mail")
+    @mock.patch("django.utils.timezone.now", return_value=NOW_MOCKED_VALUE)
+    def test_unregister_from_the_event_you_are_not_in_error(
+            self,
+            mocked_now,
+            mocked_send_mail,
+    ) -> None:
+        response = self.client.post(
+            unregister_url(self.not_participate_in_event.id)
+        )
+        mocked_send_mail.assert_not_called()
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
