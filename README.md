@@ -43,7 +43,7 @@ The **Event Management API Service** is a Django Rest Framework project for mana
 6. **(Optional) Load data to db**:
 
     ```bash
-    python manage.py loaddata events_data.json
+    python manage.py loaddata events/tests/fixtures/events_data.json
     ```
 
 7. **Create a Superuser.**:
