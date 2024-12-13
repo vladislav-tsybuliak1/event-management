@@ -12,16 +12,21 @@ from events.schemas.examples.events import (
     list_example_json,
     create_update_request_example_json,
     create_update_response_example_json,
-    unauthorised_401_no_token_example_json,
-    unauthorised_401_invalid_token_example_json,
+    unauthorised_401_no_token,
+    unauthorised_401_invalid_token,
     bad_request_400_empty_fields,
     bad_request_400_overlapping_event,
     bad_request_400_event_in_the_past,
-    bad_request_400_end_time_before_start_time, detail_example_json,
+    bad_request_400_end_time_before_start_time,
+    detail_example_json,
     not_found_404,
+    bad_request_400_update_past_event, forbidden_403,
 )
-from events.serializers import EventListSerializer, \
-    EventCreateUpdateSerializer, EventRetrieveSerializer
+from events.serializers import (
+    EventListSerializer,
+    EventCreateUpdateSerializer,
+    EventRetrieveSerializer,
+)
 
 UNAUTHORISED_OPEN_API_RESPONSE = OpenApiResponse(
     description="Unauthorized",
@@ -29,12 +34,12 @@ UNAUTHORISED_OPEN_API_RESPONSE = OpenApiResponse(
     examples=[
         OpenApiExample(
             name="No token example",
-            value=unauthorised_401_no_token_example_json,
+            value=unauthorised_401_no_token,
             response_only=True,
         ),
         OpenApiExample(
             name="Invalid token example",
-            value=unauthorised_401_invalid_token_example_json,
+            value=unauthorised_401_invalid_token,
             response_only=True,
         ),
     ],
@@ -49,7 +54,31 @@ NOT_FOUND_OPEN_API_RESPONSE = OpenApiResponse(
             value=not_found_404,
             response_only=True,
         )
+    ],
+)
+
+FORBIDDEN_OPEN_API_RESPONSE = OpenApiResponse(
+    description="Forbidden",
+    response=OpenApiTypes.OBJECT,
+    examples=[
+        OpenApiExample(
+            name="Forbidden example",
+            value=forbidden_403,
+            response_only=True,
+        ),
     ]
+)
+
+CREATE_UPDATE_REQUEST_EXAMPLE = OpenApiExample(
+    name="Event request example",
+    value=create_update_request_example_json,
+    request_only=True,
+)
+
+CREATE_UPDATE_RESPONSE_EXAMPLE = OpenApiExample(
+    name="Event response example",
+    value=create_update_response_example_json,
+    response_only=True,
 )
 
 EMPTY_FIELDS_OPEN_API_EXAMPLE = OpenApiExample(
@@ -64,15 +93,21 @@ OVERLAPPING_EVENTS_OPEN_API_EXAMPLE = OpenApiExample(
     response_only=True,
 )
 
-CREATE_PAST_EVENT_OPEN_API_EXAMPLE = OpenApiExample(
-    name="Create past event example",
+CREATE_UPDATE_PAST_EVENT_OPEN_API_EXAMPLE = OpenApiExample(
+    name="Event with start time in the past example",
     value=bad_request_400_event_in_the_past,
     response_only=True,
 )
 
-CREATE_END_TIME_BEFORE_START_TIME_OPEN_API_EXAMPLE = OpenApiExample(
-    name="Create event with the ending time before starting time example",
+CREATE_UPDATE_END_TIME_BEFORE_START_TIME_OPEN_API_EXAMPLE = OpenApiExample(
+    name="Event with the ending time before starting time example",
     value=bad_request_400_end_time_before_start_time,
+    response_only=True,
+)
+
+UPDATE_PAST_EVENT_OPEN_API_EXAMPLE = OpenApiExample(
+    name="Updated event that started or is finished example",
+    value=bad_request_400_update_past_event,
     response_only=True,
 )
 
@@ -156,16 +191,8 @@ event_schema = extend_schema_view(
         description="Create a new event",
         request=EventCreateUpdateSerializer(),
         examples=[
-            OpenApiExample(
-                name="Event request example",
-                value=create_update_request_example_json,
-                request_only=True,
-            ),
-            OpenApiExample(
-                name="Event response example",
-                value=create_update_response_example_json,
-                response_only=True,
-            ),
+            CREATE_UPDATE_REQUEST_EXAMPLE,
+            CREATE_UPDATE_RESPONSE_EXAMPLE,
         ],
         responses={
             status.HTTP_201_CREATED: EventCreateUpdateSerializer(),
@@ -175,8 +202,8 @@ event_schema = extend_schema_view(
                 examples=[
                     EMPTY_FIELDS_OPEN_API_EXAMPLE,
                     OVERLAPPING_EVENTS_OPEN_API_EXAMPLE,
-                    CREATE_PAST_EVENT_OPEN_API_EXAMPLE,
-                    CREATE_END_TIME_BEFORE_START_TIME_OPEN_API_EXAMPLE,
+                    CREATE_UPDATE_PAST_EVENT_OPEN_API_EXAMPLE,
+                    CREATE_UPDATE_END_TIME_BEFORE_START_TIME_OPEN_API_EXAMPLE,
                 ],
             ),
             status.HTTP_401_UNAUTHORIZED: UNAUTHORISED_OPEN_API_RESPONSE,
@@ -192,6 +219,31 @@ event_schema = extend_schema_view(
         ],
         responses={
             status.HTTP_200_OK: EventRetrieveSerializer(),
+            status.HTTP_404_NOT_FOUND: NOT_FOUND_OPEN_API_RESPONSE,
+        },
+    ),
+    update=extend_schema(
+        description="Update event information",
+        request=EventCreateUpdateSerializer(),
+        examples=[
+            CREATE_UPDATE_REQUEST_EXAMPLE,
+            CREATE_UPDATE_RESPONSE_EXAMPLE,
+        ],
+        responses={
+            status.HTTP_200_OK: EventCreateUpdateSerializer(),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
+                description="Bad request, invalid data",
+                response=OpenApiTypes.OBJECT,
+                examples=[
+                    EMPTY_FIELDS_OPEN_API_EXAMPLE,
+                    UPDATE_PAST_EVENT_OPEN_API_EXAMPLE,
+                    OVERLAPPING_EVENTS_OPEN_API_EXAMPLE,
+                    CREATE_UPDATE_PAST_EVENT_OPEN_API_EXAMPLE,
+                    CREATE_UPDATE_END_TIME_BEFORE_START_TIME_OPEN_API_EXAMPLE,
+                ],
+            ),
+            status.HTTP_401_UNAUTHORIZED: UNAUTHORISED_OPEN_API_RESPONSE,
+            status.HTTP_403_FORBIDDEN: FORBIDDEN_OPEN_API_RESPONSE,
             status.HTTP_404_NOT_FOUND: NOT_FOUND_OPEN_API_RESPONSE,
         },
     ),

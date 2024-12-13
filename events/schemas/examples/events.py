@@ -87,11 +87,11 @@ create_update_response_example_json = {
     "participants": 0,
 }
 
-unauthorised_401_no_token_example_json = {
+unauthorised_401_no_token = {
     "detail": "Authentication credentials were not provided."
 }
 
-unauthorised_401_invalid_token_example_json = {
+unauthorised_401_invalid_token = {
     "detail": "Given token not valid for any token type",
     "code": "token_not_valid",
     "messages": [
@@ -124,4 +124,14 @@ bad_request_400_end_time_before_start_time = {
     "non_field_errors": ["Event starting time must be before its ending time."]
 }
 
+bad_request_400_update_past_event = {
+    "non_field_errors": [
+        "This event has already started or is finished and cannot be updated."
+    ]
+}
+
 not_found_404 = {"detail": "No Event matches the given query."}
+
+forbidden_403 = {
+    "detail": "You do not have permission to perform this action."
+}
