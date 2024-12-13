@@ -24,14 +24,17 @@ from events.schemas.examples.events import (
     forbidden_403,
     ok_200_registered,
     bad_request_400_already_registered,
-    bad_request_400_organizer_registering, ok_200_cancel_registration,
+    bad_request_400_organizer_registering,
+    ok_200_cancel_registration,
     bad_request_400_not_registered,
+    bad_request_400_event_started_or_in_the_past,
 )
 from events.serializers import (
     EventListSerializer,
     EventCreateUpdateSerializer,
     EventRetrieveSerializer,
 )
+
 
 UNAUTHORISED_OPEN_API_RESPONSE = OpenApiResponse(
     description="Unauthorized",
@@ -312,6 +315,11 @@ event_schema = extend_schema_view(
                     OpenApiExample(
                         name="Organizer registering example",
                         value=bad_request_400_organizer_registering,
+                        response_only=True,
+                    ),
+                    OpenApiExample(
+                        name="Event started or is in the past example",
+                        value=bad_request_400_event_started_or_in_the_past,
                         response_only=True,
                     ),
                 ],
