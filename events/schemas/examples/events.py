@@ -51,6 +51,23 @@ list_example_json = [
     },
 ]
 
+detail_example_json = {
+    "id": 1,
+    "title": "Annual Company Meeting",
+    "description": "A meeting to discuss the company's yearly progress and plans.",
+    "start_time": "13 Dec 2024 08:00",
+    "end_time": "13 Dec 2024 10:00",
+    "location": "Headquarters",
+    "organizer": "Digital_Dragon (digital.dragon@test.com)",
+    "participants": [
+        "John_Doe (john.doe@test.com)",
+        "Techie_Tiger (tiger@test.com)",
+        "SkyWalker89 (sky.walker@test.com)",
+        "Mystic_Phoenix (mystic.phoenix@test.com)",
+        "QuantumQuokka (quantum.quokka@test.com)",
+    ],
+}
+
 create_update_request_example_json = {
     "title": "Product Launch",
     "description": "Official launch event for the company's new product.",
@@ -106,3 +123,5 @@ bad_request_400_event_in_the_past = {
 bad_request_400_end_time_before_start_time = {
     "non_field_errors": ["Event starting time must be before its ending time."]
 }
+
+not_found_404 = {"detail": "No Event matches the given query."}

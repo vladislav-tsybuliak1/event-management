@@ -17,10 +17,11 @@ from events.schemas.examples.events import (
     bad_request_400_empty_fields,
     bad_request_400_overlapping_event,
     bad_request_400_event_in_the_past,
-    bad_request_400_end_time_before_start_time,
+    bad_request_400_end_time_before_start_time, detail_example_json,
+    not_found_404,
 )
-from events.serializers import EventListSerializer, EventCreateUpdateSerializer
-
+from events.serializers import EventListSerializer, \
+    EventCreateUpdateSerializer, EventRetrieveSerializer
 
 UNAUTHORISED_OPEN_API_RESPONSE = OpenApiResponse(
     description="Unauthorized",
@@ -37,6 +38,18 @@ UNAUTHORISED_OPEN_API_RESPONSE = OpenApiResponse(
             response_only=True,
         ),
     ],
+)
+
+NOT_FOUND_OPEN_API_RESPONSE = OpenApiResponse(
+    description="Not found",
+    response=OpenApiTypes.OBJECT,
+    examples=[
+        OpenApiExample(
+            name="Not found",
+            value=not_found_404,
+            response_only=True,
+        )
+    ]
 )
 
 EMPTY_FIELDS_OPEN_API_EXAMPLE = OpenApiExample(
@@ -167,6 +180,19 @@ event_schema = extend_schema_view(
                 ],
             ),
             status.HTTP_401_UNAUTHORIZED: UNAUTHORISED_OPEN_API_RESPONSE,
+        },
+    ),
+    retrieve=extend_schema(
+        description="Retrieve detail event information",
+        examples=[
+            OpenApiExample(
+                name="Event detail example",
+                value=detail_example_json,
+            )
+        ],
+        responses={
+            status.HTTP_200_OK: EventRetrieveSerializer(),
+            status.HTTP_404_NOT_FOUND: NOT_FOUND_OPEN_API_RESPONSE,
         },
     ),
 )
