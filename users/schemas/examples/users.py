@@ -65,3 +65,14 @@ NOT_VALID_PASSWORD_OPEN_API_EXAMPLE = OpenApiExample(
     value={"password": ["Ensure this field has at least 5 characters."]},
     response_only=True,
 )
+
+USER_DETAIL_OPEN_API_EXAMPLE = OpenApiExample(
+    name="User detail example",
+    value={
+        "id": 3,
+        "username": "SkyWalker89",
+        "email": "sky.walker@test.com",
+        "is_staff": False,
+    },
+    response_only=True,
+)

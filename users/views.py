@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
-from users.schemas.users import user_register_schema
+from users.schemas.users import user_register_schema, user_manage_schema
 from users.serializers import UserSerializer
 
 
@@ -12,6 +12,7 @@ class CreateUserView(generics.CreateAPIView):
     permission_classes = []
 
 
+@user_manage_schema
 class ManageUserView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
