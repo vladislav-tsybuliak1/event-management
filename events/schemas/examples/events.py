@@ -146,6 +146,10 @@ bad_request_400_event_started_or_in_the_past = {
     "detail": "You cannot register for the event that have already started or is finished"
 }
 
+bad_request_400_unregister_event_started_or_in_the_past = {
+    "detail": "You cannot unregister from the event that have already started or is finished"
+}
+
 ok_200_registered = {"detail": "Successfully registered for the event."}
 
 ok_200_cancel_registration = {

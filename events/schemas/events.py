@@ -28,6 +28,7 @@ from events.schemas.examples.events import (
     ok_200_cancel_registration,
     bad_request_400_not_registered,
     bad_request_400_event_started_or_in_the_past,
+    bad_request_400_unregister_event_started_or_in_the_past,
 )
 from events.serializers import (
     EventListSerializer,
@@ -350,6 +351,11 @@ event_schema = extend_schema_view(
                     OpenApiExample(
                         name="Not registered example",
                         value=bad_request_400_not_registered,
+                        response_only=True,
+                    ),
+                    OpenApiExample(
+                        name="Event started or is in the past example",
+                        value=bad_request_400_unregister_event_started_or_in_the_past,
                         response_only=True,
                     ),
                 ],
