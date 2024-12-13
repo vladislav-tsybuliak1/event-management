@@ -2,9 +2,11 @@ from django.contrib.auth import get_user_model
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
+from users.schemas.users import user_register_schema
 from users.serializers import UserSerializer
 
 
+@user_register_schema
 class CreateUserView(generics.CreateAPIView):
     serializer_class = UserSerializer
     permission_classes = []
