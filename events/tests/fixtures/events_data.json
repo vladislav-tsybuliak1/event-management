@@ -1,0 +1,421 @@
+[
+  {
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$M6kRzwIVCgIUPJ6lKJYxRD$ar5G4Qc1Adt6T/0E2E8Sk1NZ8Q1mjHAigVRFhH5EbaA=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "John_Doe",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-12-12T21:35:39.556Z",
+      "email": "john.doe@test.com",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$9VcY3mhZrwqHv9GMbRyOTX$yhFjAykeAiv+Tlqq3GqO0H4sLYbzxsiYCaUP3tOhB9o=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Techie_Tiger",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-12-12T21:36:53.789Z",
+      "email": "tiger@test.com",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$ypBc7b9BUqHvaSbVqP453W$U4u/3uC9fvoCZEksBVVPxQ07DavAsAzvmA1V3JVhSq4=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "SkyWalker89",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-12-12T21:37:11.148Z",
+      "email": "sky.walker@test.com",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$bJ4jdDONyGrvq2s8bkkjpL$CCXt7pejRfkoSJuKw+VenIH9v6q1UpKLJQFoqdjSHNM=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Mystic_Phoenix",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-12-12T21:37:24.689Z",
+      "email": "mystic.phoenix@test.com",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$MlbkqAGfHO1XZ3mBgesfTs$j9TXBgN+V2dy/b54+i6hyhviUaSseOM3lD/JZ088TFo=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "QuantumQuokka",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-12-12T21:37:44.492Z",
+      "email": "quantum.quokka@test.com",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$8r5mgj8RjIT7OpjI2xXrRq$2NM80f8KgF+HIqfWRfvDahgT0DZqvn0k877JGhKTR8s=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "NeonNinja42",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-12-12T21:38:00.516Z",
+      "email": "neon.42@test.com",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 7,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$jRPW7DRvRXkjgUiB8BjB2K$fR3+13eKXu0xphv8hIs5Lk26U6VIG/+nreuneEe+Owg=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Cosmic_Coder",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-12-12T21:38:17.158Z",
+      "email": "cosmic.coder@test.com",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 8,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$fXNtngdzE0lpCzkySD8Pa5$Gn20QHsQU/ngpRwFv9+kkG2WNSD9TNWluDI0YdLE89Y=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Electric_Eagle",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-12-12T21:38:28.210Z",
+      "email": "electric.eagle@test.com",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 9,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$IadhFPNCYS09qZ0hejiF3T$SEyZExvv9tkkxvOJDTHAk4ZmyzZg7jNrOXq+13VpVl8=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Pixel_Panda",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-12-12T21:38:39.553Z",
+      "email": "pixel.panda@test.com",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 10,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$o3yraG8wKYVOeucNjbiwAr$c+CR/yjRpAXy8QfRSIiZtaYiQGHvBs+XGbLCwvm9UAw=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Digital_Dragon",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-12-12T21:38:53.390Z",
+      "email": "digital.dragon@test.com",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 11,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$BFeKkMNOnHu5PcIpFW7cDW$u9ihrToA765iFSuYUuygWMDGPRIkFLp3XURhKDaVRgE=",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-12-12T21:42:59.497Z",
+      "email": "admin@admin.com",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 1,
+    "fields": {
+      "title": "Annual Company Meeting",
+      "description": "A meeting to discuss the company's yearly progress and plans.",
+      "start_time": "2024-12-13T08:00:00Z",
+      "end_time": "2024-12-13T10:00:00Z",
+      "location": "Headquarters",
+      "organizer": 10,
+      "participants": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 2,
+    "fields": {
+      "title": "Holiday Party",
+      "description": "A festive gathering for all employees to celebrate the holiday season.",
+      "start_time": "2024-12-10T17:00:00Z",
+      "end_time": "2024-12-10T21:00:00Z",
+      "location": "Main Hall",
+      "organizer": 10,
+      "participants": [
+        1,
+        2,
+        4,
+        3,
+        5,
+        6,
+        7
+      ]
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 3,
+    "fields": {
+      "title": "Tech Conference",
+      "description": "A conference showcasing the latest in technology and innovation.",
+      "start_time": "2025-01-25T07:00:00Z",
+      "end_time": "2025-01-25T15:00:00Z",
+      "location": "Convention Center",
+      "organizer": 10,
+      "participants": [
+        2,
+        5
+      ]
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 4,
+    "fields": {
+      "title": "Project Kickoff",
+      "description": "Initial meeting to kick off a new project with all stakeholders.",
+      "start_time": "2024-12-13T12:00:00Z",
+      "end_time": "2024-12-13T14:00:00Z",
+      "location": "Room 301",
+      "organizer": 1,
+      "participants": [
+        10,
+        8,
+        6,
+        4,
+        2,
+        3,
+        5
+      ]
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 5,
+    "fields": {
+      "title": "Networking Event",
+      "description": "An event to network and connect with industry professionals.",
+      "start_time": "2024-12-11T16:00:00Z",
+      "end_time": "2024-12-11T19:00:00Z",
+      "location": "Downtown Cafe",
+      "organizer": 1,
+      "participants": []
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 6,
+    "fields": {
+      "title": "Workshop: AI in Healthcare",
+      "description": "A workshop discussing the applications of AI in the healthcare industry.",
+      "start_time": "2024-12-15T08:00:00Z",
+      "end_time": "2024-12-15T10:00:00Z",
+      "location": "Lab 5",
+      "organizer": 1,
+      "participants": [
+        2,
+        7,
+        8,
+        9,
+        10
+      ]
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 7,
+    "fields": {
+      "title": "Webinar: Future of Blockchain",
+      "description": "An online seminar exploring the future developments in blockchain technology.",
+      "start_time": "2025-01-20T09:00:00Z",
+      "end_time": "2025-01-20T10:30:00Z",
+      "location": "Online",
+      "organizer": 1,
+      "participants": [
+        2,
+        7,
+        4,
+        5,
+        9
+      ]
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 8,
+    "fields": {
+      "title": "Client Presentation",
+      "description": "Presentation of project progress and future plans to the client.",
+      "start_time": "2024-12-22T13:00:00Z",
+      "end_time": "2024-12-22T14:30:00Z",
+      "location": "Client Office",
+      "organizer": 3,
+      "participants": []
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 9,
+    "fields": {
+      "title": "Board Meeting",
+      "description": "Regular meeting of the company's board of directors.",
+      "start_time": "2024-06-10T06:00:00Z",
+      "end_time": "2024-06-10T08:00:00Z",
+      "location": "Conference Room A",
+      "organizer": 3,
+      "participants": [
+        1,
+        2,
+        4,
+        6,
+        5,
+        7,
+        8
+      ]
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 10,
+    "fields": {
+      "title": "Marketing Strategy Session",
+      "description": "A session to brainstorm and plan marketing strategies.",
+      "start_time": "2025-05-14T10:00:00Z",
+      "end_time": "2025-05-14T12:00:00Z",
+      "location": "Meeting Room B",
+      "organizer": 3,
+      "participants": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 11,
+    "fields": {
+      "title": "Sales Team Training",
+      "description": "Training session to enhance the skills of the sales team.",
+      "start_time": "2025-04-18T07:00:00Z",
+      "end_time": "2025-04-18T09:00:00Z",
+      "location": "Training Center",
+      "organizer": 3,
+      "participants": [
+        7,
+        8,
+        6,
+        9
+      ]
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 12,
+    "fields": {
+      "title": "Product Launch",
+      "description": "Official launch event for the company's new product.",
+      "start_time": "2025-03-30T11:00:00Z",
+      "end_time": "2025-03-30T14:00:00Z",
+      "location": "Main Auditorium",
+      "organizer": 3,
+      "participants": []
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 13,
+    "fields": {
+      "title": "Product Launch",
+      "description": "Official launch event for the company's new product.",
+      "start_time": "2023-03-30T11:00:00Z",
+      "end_time": "2023-03-30T14:00:00Z",
+      "location": "Main Auditorium",
+      "organizer": 3,
+      "participants": []
+    }
+  }
+]
