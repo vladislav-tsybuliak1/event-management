@@ -16,6 +16,7 @@ from email_templates.event_registration_template import (
 from email_templates.event_cancel_registration_template import (
     CANCEL_REGISTRATION_HTML_CONTENT,
 )
+from email_templates.event_update_template import UPDATE_HTML_CONTENT
 from events.filters import EventFilter
 from events.models import Event
 from events.permissions import IsOrganizerOrReadOnly
@@ -53,6 +54,39 @@ class EventViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer: EventCreateUpdateSerializer):
         serializer.save(organizer=self.request.user)
+
+    def perform_update(self, serializer: EventCreateUpdateSerializer):
+        event = self.get_object()
+
+        updated_event = serializer.save()
+
+        # Check if start_time, end_time, or location have changed
+        if (
+            updated_event.start_time != event.start_time
+            or updated_event.end_time != event.end_time
+            or updated_event.location != event.location
+        ):
+            # Sending email about update
+            subject = f"Event {event.title} was updated"
+            message = UPDATE_HTML_CONTENT.format(
+                event=event.title,
+                start_time=event.start_time.strftime("%d %b %Y %H:%M"),
+                end_time=event.end_time.strftime("%d %b %Y %H:%M"),
+                location=event.location,
+                organizer_email=event.organizer.email,
+            )
+            participant_emails = event.participants.values_list(
+                "email",
+                flat=True,
+            )
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=participant_emails,
+                fail_silently=True,
+                html_message=message,
+            )
 
     @action(
         detail=True,
