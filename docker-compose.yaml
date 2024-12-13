@@ -29,5 +29,23 @@ services:
     volumes:
       - my_db:$PGDATA
 
+  celery:
+    build:
+      context: .
+    volumes:
+      - ./:/app
+    command: >
+      sh -c "celery -A event_management worker --loglevel=info"
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:latest
+    expose:
+      - 6379
+    restart: always
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+
 volumes:
   my_db:
